@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daan Boekaar — Support a Street Musician</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f7f6f3;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.09);
+    --border-strong: rgba(0,0,0,0.18);
+    --text: #0f0f0e;
+    --muted: #888580;
+    --accent: #0f0f0e;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 80px;
+    overflow-x: hidden;
+  }
+
+  /* ── BANNER ── */
+  .nature-banner {
+    width: 100%;
+    position: relative;
+    height: 260px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .nature-banner canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .banner-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 20px 20px;
+    background: linear-gradient(to bottom,
+      rgba(0,0,0,0) 20%,
+      rgba(0,0,0,0.15) 55%,
+      rgba(0,0,0,0.62) 100%);
+  }
+
+  .banner-artist-row {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-bottom: 11px;
+  }
+
+  .banner-avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 2px solid rgba(255,255,255,0.75);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .banner-artist-info { flex: 1; }
+
+  .banner-name {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #fff;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+    letter-spacing: 0.01em;
+  }
+
+  .banner-handle {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 0.03em;
+    margin-top: 1px;
+  }
+
+  .banner-social-links {
+    display: flex;
+    gap: 7px;
+  }
+
+  .banner-social-link {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    background: rgba(255,255,255,0.13);
+    border: 1px solid rgba(255,255,255,0.32);
+    border-radius: 20px;
+    padding: 6px 13px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.18s;
+  }
+
+  .banner-social-link:hover {
+    background: rgba(255,255,255,0.25);
+    transform: translateY(-1px);
+  }
+
+  .banner-social-link svg {
+    width: 13px; height: 13px;
+    flex-shrink: 0;
+    color: #fff;
+  }
+
+  .banner-social-link span {
+    font-size: 0.72rem;
+    color: #fff;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 30px 28px 14px;
+    max-width: 440px;
+    width: 100%;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 8vw, 2.7rem);
+    font-weight: 600;
+    line-height: 1.12;
+    color: var(--text);
+    margin-bottom: 11px;
+    letter-spacing: -0.02em;
+  }
+
+  h1 em { font-style: italic; font-weight: 400; }
+
+  .subtitle {
+    font-size: 0.88rem;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.75;
+    max-width: 290px;
+    margin: 0 auto;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    width: 100%; max-width: 400px;
+    padding: 0 20px;
+    margin: 22px 0 18px;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: var(--border);
+  }
+  .divider span {
+    font-size: 0.66rem;
+    color: var(--muted);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── AMOUNTS ── */
+  .amount-section {
+    width: 100%; max-width: 400px;
+    padding: 0 20px;
+    margin-bottom: 18px;
+  }
+
+  .amount-label {
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .amounts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .amt-btn {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    border-radius: 14px;
+    padding: 20px 10px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(.2,.8,.3,1);
+    text-align: center;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 2px 10px rgba(0,0,0,0.04);
+  }
+
+  .amt-btn .amt-sub {
+    display: block;
+    font-size: 1rem;
+    margin-top: 4px;
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1;
+  }
+
+  .amt-btn .amt-sub-music {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    margin-top: 5px;
+    line-height: 1.3;
+    color: var(--muted);
+  }
+
+  .amt-btn:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+  }
+
+  .amt-btn.active {
+    background: var(--text);
+    color: #fff;
+    border-color: var(--text);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+  }
+
+  .amt-btn.active .amt-sub { color: rgba(255,255,255,0.55); }
+  .amt-btn.active .amt-sub-music { color: rgba(255,255,255,0.6); }
+
+  .amt-btn.recommended::after {
+    content: '★ popular';
+    position: absolute;
+    top: -10px; left: 50%;
+    transform: translateX(-50%);
+    background: var(--text);
+    color: #fff;
+    font-size: 0.5rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .amt-btn.active.recommended::after {
+    background: #444;
+  }
+
+  .amt-custom {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    border-radius: 14px;
+    padding: 20px 10px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    text-align: center;
+    width: 100%;
+    transition: all 0.18s;
+    -moz-appearance: textfield;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .amt-custom::-webkit-outer-spin-button,
+  .amt-custom::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .amt-custom::placeholder { color: #bbb; font-size: 0.82rem; }
+  .amt-custom:focus {
+    outline: none;
+    border-color: var(--border-strong);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  }
+
+  /* ── CARDS ── */
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%; max-width: 400px;
+    padding: 0 20px;
+  }
+
+  .card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 16px;
+    padding: 15px 16px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.18s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+  }
+
+  .card-icon {
+    width: 42px; height: 42px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .revolut .card-icon { background: #f0f0f0; }
+  .paypal  .card-icon { background: #e8f0fa; }
+  .wise    .card-icon { background: #edf7e8; }
+
+  .card-text { flex: 1; }
+
+  .card-name {
+    font-weight: 500;
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+  }
+
+  .card-desc {
+    font-size: 0.76rem;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .card-arrow {
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  /* Card badges */
+  .card-badges {
+    display: flex;
+    gap: 4px;
+    margin-top: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 2px 5px;
+    border-radius: 4px;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .badge-visa  { background: #1A1F71; color: #fff; font-style: italic; font-size: 0.68rem; }
+  .badge-mc    { display: flex; align-items: center; padding: 0; }
+  .mc-circles  { position: relative; width: 24px; height: 15px; display: flex; }
+  .mc-left     { width: 13px; height: 13px; border-radius: 50%; background: #EB001B; position: absolute; left: 0; top: 1px; }
+  .mc-right    { width: 13px; height: 13px; border-radius: 50%; background: #F79E1B; position: absolute; left: 7px; top: 1px; }
+  .badge-amex  { background: #2E77BC; color: #fff; }
+  .badge-apple { background: #1c1c1e; color: #fff; font-size: 0.68rem; }
+  .badge-google{ background: #f1f1f1; color: #555; border: 1px solid #ddd; }
+
+  /* ── THANK YOU OVERLAY ── */
+  .thankyou {
+    position: fixed; inset: 0;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 100;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s;
+    text-align: center;
+    padding: 40px;
+  }
+  .thankyou.visible { opacity: 1; pointer-events: all; }
+  .thankyou-heart { font-size: 3rem; margin-bottom: 16px; }
+  .thankyou h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .thankyou p { font-size: 0.9rem; color: var(--muted); max-width: 260px; line-height: 1.7; }
+  .thankyou-close {
+    margin-top: 24px;
+    background: var(--text); color: #fff;
+    border: none; border-radius: 10px;
+    padding: 10px 28px; font-size: 0.85rem;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 32px;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .no-app {
+    font-size: 0.72rem;
+    color: var(--muted);
+    line-height: 1.9;
+  }
+
+  .lang-row {
+    margin-top: 14px;
+    font-size: 0.72rem;
+    color: #bbb;
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+
+<!-- Thank you overlay -->
+<div class="thankyou" id="thankyou">
+  <div class="thankyou-heart">🙏</div>
+  <h2>Gracias, de todo corazón.</h2>
+  <p>Your support keeps the music alive on the streets of Barcelona.</p>
+  <button class="thankyou-close" onclick="document.getElementById('thankyou').classList.remove('visible')">Close</button>
+</div>
+
+<!-- Nature banner with canvas -->
+<div class="nature-banner">
+  <canvas id="bannerCanvas"></canvas>
+  <div class="banner-overlay">
+    <div class="banner-artist-row">
+      <div class="banner-avatar">🎸</div>
+      <div class="banner-artist-info">
+        <div class="banner-name">Daan Boekaar</div>
+        <div class="banner-handle">@DaanBoekaar</div>
+      </div>
+    </div>
+    <div class="banner-social-links">
+      <a class="banner-social-link" href="https://instagram.com/DaanBoekaar" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+        <span>Instagram</span>
+      </a>
+      <a class="banner-social-link" href="https://youtube.com/@DaanBoekaar" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M21.8 8s-.2-1.4-.8-2c-.8-.8-1.6-.8-2-.9C16.2 5 12 5 12 5s-4.2 0-7 .1c-.4.1-1.2.1-2 .9-.6.6-.8 2-.8 2S2 9.6 2 11.2v1.5c0 1.6.2 3.2.2 3.2s.2 1.4.8 2c.8.8 1.8.8 2.2.8C6.8 19 12 19 12 19s4.2 0 7-.2c.4-.1 1.2-.1 2-.9.6-.6.8-2 .8-2s.2-1.6.2-3.2v-1.5C22 9.6 21.8 8 21.8 8zM9.7 14.5V9l5.4 2.8-5.4 2.7z"/>
+        </svg>
+        <span>YouTube</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>Thank you for<br><em>supporting art.</em></h1>
+  <p class="subtitle">Your tip goes directly to an independent artist. It's what makes it possible to keep creating and playing music — every day, for everyone.</p>
+</div>
+
+<!-- Divider -->
+<div class="divider"><span>Choose your way to give</span></div>
+
+<!-- Amount picker -->
+<div class="amount-section">
+  <p class="amount-label">How much would you like to give?</p>
+  <div class="amounts">
+    <button class="amt-btn" onclick="setAmount(2, this)">
+      €2 <span class="amt-sub">☕</span>
+    </button>
+    <button class="amt-btn recommended active" id="btn-5" onclick="setAmount(5, this)">
+      €5 <span class="amt-sub-music">♩ support independent music! ♪</span>
+    </button>
+    <button class="amt-btn" onclick="setAmount(10, this)">
+      €10 <span class="amt-sub">♥</span>
+    </button>
+    <input class="amt-custom" id="custom-amount" type="number" min="0.5" step="0.5" placeholder="€ own amount" oninput="setCustomAmount(this.value)" />
+  </div>
+</div>
+
+<!-- Payment cards -->
+<div class="cards">
+
+  <a class="card revolut" id="btn-revolut" href="https://revolut.me/JOUWGEBRUIKERSNAAM" target="_blank" rel="noopener" onclick="showThanks()">
+    <div class="card-icon">💳</div>
+    <div class="card-text">
+      <div class="card-name">Card &amp; Revolut</div>
+      <div class="card-desc">No app needed · Pay directly in browser</div>
+      <div class="card-badges">
+        <span class="badge badge-visa">VISA</span>
+        <span class="badge badge-mc"><span class="mc-circles"><span class="mc-left"></span><span class="mc-right"></span></span></span>
+        <span class="badge badge-amex">Amex</span>
+        <span class="badge badge-apple">⌘ Pay</span>
+        <span class="badge badge-google">G Pay</span>
+      </div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <a class="card paypal" id="btn-paypal" href="https://paypal.me/JOUWNAAM" target="_blank" rel="noopener" onclick="showThanks()">
+    <div class="card-icon">🅿️</div>
+    <div class="card-text">
+      <div class="card-name">PayPal</div>
+      <div class="card-desc">Accepted worldwide · No app needed</div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+  <a class="card wise" id="btn-wise" href="https://wise.com/pay/me/JOUWNAAM" target="_blank" rel="noopener" onclick="showThanks()">
+    <div class="card-icon">🌿</div>
+    <div class="card-text">
+      <div class="card-name">Wise</div>
+      <div class="card-desc">Great for international visitors · Free to send</div>
+    </div>
+    <div class="card-arrow">→</div>
+  </a>
+
+</div>
+
+<div class="footer">
+  <p class="no-app">✓ No app to download &nbsp;·&nbsp; opens in your browser<br>✓ 100% goes to the artist</p>
+  <p class="lang-row">Gracias · Thank you · Merci · Danke · Grazie · Dank je · 谢谢 · شكراً</p>
+</div>
+
+<script>
+  /* ── CANVAS BANNER: analogue nature scene ── */
+  (function() {
+    const canvas = document.getElementById('bannerCanvas');
+    const W = canvas.width  = canvas.offsetWidth  || window.innerWidth;
+    const H = canvas.height = canvas.offsetHeight || 260;
+    const ctx = canvas.getContext('2d');
+
+    // --- Sky gradient: faded film, slightly warm ---
+    const sky = ctx.createLinearGradient(0, 0, 0, H * 0.65);
+    sky.addColorStop(0,    '#c8cec4');
+    sky.addColorStop(0.45, '#d6d0bc');
+    sky.addColorStop(1,    '#bfb8a4');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, W, H);
+
+    // --- Horizon haze ---
+    const haze = ctx.createLinearGradient(0, H * 0.45, 0, H * 0.62);
+    haze.addColorStop(0, 'rgba(210,205,190,0)');
+    haze.addColorStop(1, 'rgba(185,180,165,0.55)');
+    ctx.fillStyle = haze;
+    ctx.fillRect(0, H * 0.45, W, H * 0.2);
+
+    // --- Sea ---
+    const sea = ctx.createLinearGradient(0, H * 0.6, 0, H);
+    sea.addColorStop(0, '#8fa49e');
+    sea.addColorStop(0.5, '#7a9490');
+    sea.addColorStop(1,   '#6a8884');
+    ctx.fillStyle = sea;
+    ctx.fillRect(0, H * 0.6, W, H * 0.4);
+
+    // Sea shimmer lines
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+    ctx.lineWidth = 0.8;
+    [[0.08, 0.28], [0.38, 0.62], [0.70, 0.92]].forEach(([x1, x2]) => {
+      const y = H * (0.64 + Math.random() * 0.06);
+      ctx.beginPath(); ctx.moveTo(W*x1, y); ctx.lineTo(W*x2, y); ctx.stroke();
+    });
+    ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+    [[0.15, 0.40], [0.55, 0.78]].forEach(([x1, x2]) => {
+      const y = H * (0.72 + Math.random() * 0.08);
+      ctx.beginPath(); ctx.moveTo(W*x1, y); ctx.lineTo(W*x2, y); ctx.stroke();
+    });
+
+    // --- Distant land mass ---
+    ctx.fillStyle = 'rgba(140,138,122,0.45)';
+    ctx.beginPath();
+    ctx.ellipse(W * 0.5, H * 0.61, W * 0.65, H * 0.055, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // --- Draw a pine tree ---
+    function pine(cx, baseY, h, spread, col1, col2, col3) {
+      const trunkH = h * 0.42;
+      ctx.fillStyle = '#3a3828';
+      ctx.fillRect(cx - 3, baseY - trunkH, 5, trunkH);
+      // three tiers
+      [[0, col1], [0.22, col2], [0.42, col3]].forEach(([off, col]) => {
+        const tip = baseY - h + off * h;
+        const base = baseY - trunkH * 0.35 - off * h * 0.3;
+        const w = spread * (1 - off * 0.6);
+        ctx.fillStyle = col;
+        ctx.beginPath();
+        ctx.moveTo(cx, tip);
+        ctx.lineTo(cx - w, base);
+        ctx.lineTo(cx + w, base);
+        ctx.closePath();
+        ctx.fill();
+      });
+    }
+
+    // LEFT cluster
+    const lBase = H * 0.88;
+    pine(W * 0.055, lBase, H * 0.62, 28, '#313c2a', '#384432', '#3f4c38');
+    pine(W * 0.10,  lBase, H * 0.52, 23, '#354030', '#3c4836', '#424e3c');
+    pine(W * 0.025, lBase, H * 0.48, 20, '#303828', '#384030', '#3e4636');
+    pine(W * 0.145, lBase, H * 0.42, 18, '#384232', '#3e4838', '#444e3e');
+
+    // RIGHT cluster
+    const rBase = H * 0.88;
+    pine(W * 0.945, rBase, H * 0.60, 28, '#313c2a', '#384432', '#3f4c38');
+    pine(W * 0.895, rBase, H * 0.50, 22, '#354030', '#3c4836', '#424e3c');
+    pine(W * 0.975, rBase, H * 0.44, 19, '#303828', '#384030', '#3e4636');
+    pine(W * 0.855, rBase, H * 0.40, 17, '#384232', '#3e4838', '#444e3e');
+
+    // Distant small trees center
+    [0.40, 0.44, 0.48, 0.52, 0.56].forEach((xf, i) => {
+      const opacity = 0.28 - i * 0.02;
+      ctx.globalAlpha = opacity;
+      pine(W * xf, H * 0.64, H * 0.12, 7, '#707568', '#787d70', '#808578');
+      ctx.globalAlpha = 1;
+    });
+
+    // --- Soft clouds ---
+    function cloud(cx, cy, rx, ry, alpha) {
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = 'rgba(255,255,252,0.9)';
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(cx + rx * 0.35, cy - ry * 0.3, rx * 0.65, ry * 0.75, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(cx - rx * 0.4, cy - ry * 0.15, rx * 0.55, ry * 0.65, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+    cloud(W * 0.22, H * 0.20, 68, 18, 0.22);
+    cloud(W * 0.65, H * 0.14, 80, 16, 0.17);
+    cloud(W * 0.80, H * 0.28, 50, 13, 0.13);
+
+    // --- Film colour grade: warm shadows, cool highlights ---
+    const grade = ctx.createLinearGradient(0, 0, W, H);
+    grade.addColorStop(0,   'rgba(190,170,130,0.18)');
+    grade.addColorStop(0.5, 'rgba(160,155,140,0.08)');
+    grade.addColorStop(1,   'rgba(80,105,100,0.20)');
+    ctx.fillStyle = grade;
+    ctx.fillRect(0, 0, W, H);
+
+    // Slightly bleached highlights top
+    const bleach = ctx.createLinearGradient(0, 0, 0, H * 0.3);
+    bleach.addColorStop(0, 'rgba(240,235,220,0.18)');
+    bleach.addColorStop(1, 'rgba(240,235,220,0)');
+    ctx.fillStyle = bleach;
+    ctx.fillRect(0, 0, W, H * 0.3);
+
+    // --- Grain ---
+    const imgData = ctx.getImageData(0, 0, W, H);
+    const d = imgData.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const noise = (Math.random() - 0.5) * 38;
+      d[i]   = Math.min(255, Math.max(0, d[i]   + noise));
+      d[i+1] = Math.min(255, Math.max(0, d[i+1] + noise * 0.92));
+      d[i+2] = Math.min(255, Math.max(0, d[i+2] + noise * 0.82));
+    }
+    ctx.putImageData(imgData, 0, 0);
+
+    // --- Vignette ---
+    const vig = ctx.createRadialGradient(W/2, H/2, H*0.15, W/2, H/2, H*0.85);
+    vig.addColorStop(0, 'rgba(0,0,0,0)');
+    vig.addColorStop(1, 'rgba(10,8,4,0.52)');
+    ctx.fillStyle = vig;
+    ctx.fillRect(0, 0, W, H);
+
+    // Small light leak top-left (analogue touch)
+    const leak = ctx.createRadialGradient(W * 0.05, 0, 0, W * 0.05, 0, W * 0.28);
+    leak.addColorStop(0, 'rgba(240,210,150,0.22)');
+    leak.addColorStop(1, 'rgba(240,210,150,0)');
+    ctx.fillStyle = leak;
+    ctx.fillRect(0, 0, W * 0.4, H * 0.5);
+  })();
+
+  /* ── PAYMENT LOGIC ── */
+  let selectedAmount = 5;
+
+  const links = {
+    revolut: "https://revolut.me/JOUWGEBRUIKERSNAAM",
+    paypal:  "https://paypal.me/JOUWNAAM",
+    wise:    "https://wise.com/pay/me/JOUWNAAM"
+  };
+
+  function setAmount(n, el) {
+    selectedAmount = n;
+    document.querySelectorAll('.amt-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('custom-amount').value = '';
+    updateLinks();
+  }
+
+  function setCustomAmount(val) {
+    const n = parseFloat(val);
+    document.querySelectorAll('.amt-btn').forEach(b => b.classList.remove('active'));
+    selectedAmount = (!isNaN(n) && n > 0) ? n : 5;
+    updateLinks();
+  }
+
+  function updateLinks() {
+    document.getElementById('btn-paypal').href  = links.paypal  + "/" + selectedAmount + "EUR";
+    document.getElementById('btn-revolut').href = links.revolut + "?amount=" + selectedAmount;
+    document.getElementById('btn-wise').href    = links.wise;
+  }
+
+  function showThanks() {
+    setTimeout(() => document.getElementById('thankyou').classList.add('visible'), 600);
+  }
+
+  updateLinks();
+</script>
+</body>
+</html>
